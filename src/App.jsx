@@ -3,8 +3,8 @@ import Layout from './components/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import AddExpense from './pages/AddExpense.jsx'
 import Insights from './pages/Insights.jsx'
+import Settings from './pages/Settings.jsx'
 
-// Route configuration: Layout wraps all pages, each path maps to a component
 function App() {
   return (
     <Routes>
@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/add" element={<AddExpense />} />
         <Route path="/insights" element={<Insights />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
   )

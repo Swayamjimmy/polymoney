@@ -1,14 +1,15 @@
-import { useExpenses } from '../context/ExpenseContext.jsx'
+import { useExpenses, useBudgets } from '../context/ExpenseContext.jsx'
 import { useGemini } from '../hooks/useGemini.js'
 
 function Insights() {
   const expenses = useExpenses()
+  const budgets = useBudgets()
   const { insights, loading, error, getInsights } = useGemini()
 
   // Only call getInsights when there are expenses to analyze
   function handleRefresh() {
     if (expenses.length > 0) {
-      getInsights(expenses)
+      getInsights(expenses, budgets)
     }
   }
 

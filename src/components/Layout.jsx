@@ -1,7 +1,6 @@
 import { NavLink, Outlet } from 'react-router'
 
 function Layout() {
-  // Dynamic class function: returns different Tailwind classes based on active state
   const linkClass = ({ isActive }) =>
     `px-4 py-2 rounded-lg transition-colors ${isActive ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`
 
@@ -13,6 +12,7 @@ function Layout() {
           <NavLink to="/" className={linkClass}>Dashboard</NavLink>
           <NavLink to="/add" className={linkClass}>Add Expense</NavLink>
           <NavLink to="/insights" className={linkClass}>AI Insights</NavLink>
+          <NavLink to="/settings" className={linkClass}>Settings</NavLink>
         </nav>
       </header>
       <main>
@@ -22,4 +22,4 @@ function Layout() {
   )
 }
 
-export default Layout
+export default Layout       

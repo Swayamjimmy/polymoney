@@ -1,4 +1,4 @@
-import { useExpenses } from '../context/ExpenseContext.jsx'
+import { useExpenses, useBudgets } from '../context/ExpenseContext.jsx'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
 const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#06b6d4']
@@ -7,6 +7,7 @@ const CATEGORIES = ['Food', 'Transport', 'Entertainment', 'Shopping', 'Bills', '
 
 function Dashboard() {
   const expenses = useExpenses()
+  const budgets = useBudgets()
 
   const totalSpending = expenses.reduce((sum, e) => sum + Number(e.amount), 0)
   const totalTransactions = expenses.length
@@ -26,12 +27,24 @@ function Dashboard() {
 
   const topCategory = categoryData.length > 0 ? categoryData.reduce((a, b) => a.value > b.value ? a : b).name : 'N/A'
 
+  // Calculate current month spending per category for budget progress
+  const currentMonth = new Date().toISOString().slice(0, 7)
+  const monthlyByCategory = CATEGORIES.reduce((acc, cat) => {
+    acc[cat] = expenses
+      .filter(e => e.category === cat && e.date.slice(0, 7) === currentMonth)
+      .reduce((sum, e) => sum + Number(e.amount), 0)
+    return acc
+  }, {})
+
+  // Only show progress bars for categories with a budget set
+  const activeBudgets = Object.entries(budgets).filter(([, limit]) => limit > 0)
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-gray-800 rounded-xl p-6">
           <p className="text-gray-400 text-sm">Total Spending</p>
-          <p className="text-2xl font-bold text-white">₹{totalSpending.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-white">${totalSpending.toFixed(2)}</p>
         </div>
         <div className="bg-gray-800 rounded-xl p-6">
           <p className="text-gray-400 text-sm">Transactions</p>
@@ -42,6 +55,39 @@ function Dashboard() {
           <p className="text-2xl font-bold text-white">{topCategory}</p>
         </div>
       </div>
+
+      {activeBudgets.length > 0 && (
+        <div className="bg-gray-800 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-semibold mb-4">Budget Progress</h2>
+          <div className="space-y-4">
+            {activeBudgets.map(([cat, limit]) => {
+              const spent = monthlyByCategory[cat] || 0
+              const percentage = Math.min((spent / limit) * 100, 100)
+              const colorClass = percentage >= 100 ? 'bg-red-500' : percentage >= 80 ? 'bg-yellow-500' : 'bg-green-500'
+
+              return (
+                <div key={cat}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-gray-300">{cat}</span>
+                    <span className="text-gray-400">${spent.toFixed(2)} / ${limit}</span>
+                  </div>
+                  <div className="w-full bg-gray-700 h-2 rounded-full">
+                    <div
+                      className={`h-2 rounded-full ${colorClass}`}
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                  {percentage >= 80 && (
+                    <p className="text-yellow-400 text-xs mt-1">
+                      {percentage >= 100 ? `Over budget by $${(spent - limit).toFixed(2)}!` : `${percentage.toFixed(0)}% of budget used`}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {expenses.length === 0 ? (
         <p className="text-gray-400 text-center py-12">No expenses yet. Add some to see your charts!</p>
@@ -56,7 +102,7 @@ function Dashboard() {
                     <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
+                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -68,7 +114,7 @@ function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="month" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
+                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
                 <Bar dataKey="total" fill="#6366f1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
