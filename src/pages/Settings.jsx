@@ -24,7 +24,7 @@ function Settings() {
           <div key={cat} className="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3">
             <label className="text-gray-300">{cat}</label>
             <div className="flex items-center gap-1">
-              <span className="text-gray-400">$</span>
+              <span className="text-gray-400">₹</span>
               <input
                 type="number"
                 value={budgets[cat] || ''}

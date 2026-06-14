@@ -44,7 +44,7 @@ function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-gray-800 rounded-xl p-6">
           <p className="text-gray-400 text-sm">Total Spending</p>
-          <p className="text-2xl font-bold text-white">${totalSpending.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-white">₹{totalSpending.toFixed(2)}</p>
         </div>
         <div className="bg-gray-800 rounded-xl p-6">
           <p className="text-gray-400 text-sm">Transactions</p>
@@ -69,7 +69,7 @@ function Dashboard() {
                 <div key={cat}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-gray-300">{cat}</span>
-                    <span className="text-gray-400">${spent.toFixed(2)} / ${limit}</span>
+                    <span className="text-gray-400">₹{spent.toFixed(2)} / ₹{limit}</span>
                   </div>
                   <div className="w-full bg-gray-700 h-2 rounded-full">
                     <div
@@ -79,7 +79,7 @@ function Dashboard() {
                   </div>
                   {percentage >= 80 && (
                     <p className="text-yellow-400 text-xs mt-1">
-                      {percentage >= 100 ? `Over budget by $${(spent - limit).toFixed(2)}!` : `${percentage.toFixed(0)}% of budget used`}
+                      {percentage >= 100 ? `Over budget by ₹${(spent - limit).toFixed(2)}!` : `${percentage.toFixed(0)}% of budget used`}
                     </p>
                   )}
                 </div>
@@ -102,7 +102,7 @@ function Dashboard() {
                     <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -114,7 +114,7 @@ function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis dataKey="month" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
                 <Bar dataKey="total" fill="#6366f1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>

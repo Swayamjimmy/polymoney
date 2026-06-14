@@ -7,7 +7,7 @@ function Layout() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-4">SpendWise AI</h1>
+        <h1 className="text-3xl font-bold text-white mb-4">Polymoney AI</h1>
         <nav className="flex gap-2">
           <NavLink to="/" className={linkClass}>Dashboard</NavLink>
           <NavLink to="/add" className={linkClass}>Add Expense</NavLink>
